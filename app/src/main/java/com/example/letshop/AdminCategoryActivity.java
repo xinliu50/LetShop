@@ -38,13 +38,6 @@ public class AdminCategoryActivity extends AppCompatActivity {
         watches = (ImageView)findViewById(R.id.watches);
         mobilePhones = (ImageView)findViewById(R.id.mobilephones);
 
-
-
-
-
-
-
-
         tShirts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
