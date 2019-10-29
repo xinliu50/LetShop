@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.letshop.Model.Users;
@@ -22,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import io.paperdb.Paper;
 
 public class LoginActivity extends AppCompatActivity {
@@ -31,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog loadingBar;
     private String parentDbName = "Users";
     private CheckBox chkBoxRememberMe;
+    private TextView AdminLink, NotAdminLink;
 
 
     @Override
@@ -46,6 +50,26 @@ public class LoginActivity extends AppCompatActivity {
                 LoginUser();
             }
         });
+
+        AdminLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginBtn.setText("Login Admin");
+                AdminLink.setVisibility(View.INVISIBLE);
+                NotAdminLink.setVisibility(View.VISIBLE);
+                parentDbName = "Admins";
+            }
+        });
+
+        NotAdminLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginBtn.setText("Login");
+                AdminLink.setVisibility(View.VISIBLE);
+                NotAdminLink.setVisibility(View.INVISIBLE);
+                parentDbName = "Users";
+            }
+        });
     }
 
     private void InitialUI() {
@@ -55,6 +79,9 @@ public class LoginActivity extends AppCompatActivity {
         loadingBar = new ProgressDialog(this);
         chkBoxRememberMe = (CheckBox)findViewById(R.id.remember_me_chk);
         Paper.init(this);
+
+        AdminLink = (TextView)findViewById(R.id.admin_panel_link);
+        NotAdminLink = (TextView)findViewById(R.id.not_admin_panel_link);
     }
 
     private void LoginUser() {
@@ -90,10 +117,17 @@ public class LoginActivity extends AppCompatActivity {
                     Users usersData = dataSnapshot.child(parentDbName).child(phone).getValue(Users.class);
                     if(usersData.getPhone().equals(phone)){
                         if(usersData.getPassword().equals(password)){
-                            Toast.makeText(LoginActivity.this,"Logged in successfully ",Toast.LENGTH_LONG).show();
-                            loadingBar.dismiss();
+                            if(parentDbName.equals("Admins")){
+                                Toast.makeText(LoginActivity.this,"Admin Logged in successfully ",Toast.LENGTH_LONG).show();
+                                loadingBar.dismiss();
 
-                            startActivity(new Intent(LoginActivity.this,HomeActivity.class));
+                                startActivity(new Intent(LoginActivity.this,AdminAddNewProductActivity.class));
+                            }else if(parentDbName.equals("Users")){
+                                Toast.makeText(LoginActivity.this,"User Logged in successfully ",Toast.LENGTH_LONG).show();
+                                loadingBar.dismiss();
+
+                                startActivity(new Intent(LoginActivity.this,HomeActivity.class));
+                            }
                         }else{
                             Toast.makeText(LoginActivity.this,"Password incorrect ",Toast.LENGTH_LONG).show();
                             loadingBar.dismiss();
