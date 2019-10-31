@@ -2,25 +2,37 @@ package com.example.letshop;
 
 import android.os.Bundle;
 
+import com.example.letshop.Model.Products;
 import com.example.letshop.Prevalent.Prevalent;
+import com.example.letshop.ViewHolder.ProductViewHolder;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.view.LayoutInflater;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -32,6 +44,9 @@ public class HomeActivity extends AppCompatActivity {
     private View headerView;
     TextView userNameTextView;
     CircleImageView profileImageView;
+    private DatabaseReference ProductRef;
+    private RecyclerView recyclerView;
+    RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +91,42 @@ public class HomeActivity extends AppCompatActivity {
     private void InitialUI() {
         userNameTextView = headerView.findViewById(R.id.user_profile_name);
         profileImageView = headerView.findViewById(R.id.user_profile_image);
+        ProductRef = FirebaseDatabase.getInstance().getReference().child("Products");
+        recyclerView = findViewById(R.id.recycler_menu);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseRecyclerOptions<Products> options = new FirebaseRecyclerOptions.Builder<Products>()
+                .setQuery(ProductRef,Products.class)
+                .build();
+
+        FirebaseRecyclerAdapter<Products, ProductViewHolder> adapter = new FirebaseRecyclerAdapter<Products, ProductViewHolder>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull Products model) {
+                holder.txtProductName.setText(model.getPname());
+                holder.txtProductPrice.setText("Price = " + model.getPrice() + "$");
+                holder.txtProductDescription.setText(model.getDescription());
+
+                Picasso.get().load(model.getImage()).into(holder.imageView);
+            }
+
+            @NonNull
+            @Override
+            public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_items_layout,parent,false);
+                 ProductViewHolder holder = new ProductViewHolder(view);
+                 return holder;
+            }
+        };
+
+        recyclerView.setAdapter(adapter);
+        adapter.startListening();
     }
 
     @Override
