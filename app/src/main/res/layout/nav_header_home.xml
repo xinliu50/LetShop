@@ -18,6 +18,7 @@
         android:layout_height="96dp"
         app:civ_border_width="2dp"
         android:src="@drawable/profile"
+        android:layout_gravity="center"
         app:civ_border_color="@android:color/white"/>
 
     <TextView
@@ -25,6 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:gravity="center"
         android:text="username"
         android:layout_marginLeft="4dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
