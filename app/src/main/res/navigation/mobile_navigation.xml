@@ -8,31 +8,31 @@
     <fragment
         android:id="@+id/nav_cart"
         android:name="com.example.letshop.ui.cart.CartFragment"
-        android:label="@string/menu_home"
+        android:label="Cart"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_orders"
-            android:name="com.example.letshop.ui.orders.OrdersFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:name="com.example.letshop.ui.orders.OrdersFragment"
+        android:label="Orders"
+        tools:layout="@layout/orders_fragment" />
 
     <fragment
         android:id="@+id/nav_categories"
         android:name="com.example.letshop.ui.categories.CategoriesFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:label="Categories"
+        tools:layout="@layout/categories_fragment" />
 
     <fragment
         android:id="@+id/nav_settings"
         android:name="com.example.letshop.ui.settings.SettingsFragment"
         android:label="@string/menu_tools"
-        tools:layout="@layout/fragment_tools" />
+        tools:layout="@layout/settings_fragment" />
 
     <fragment
         android:id="@+id/nav_logout"
         android:name="com.example.letshop.ui.logout.LogoutFragment"
         android:label="@string/menu_share"
-        tools:layout="@layout/fragment_share" />
+        tools:layout="@layout/logout_fragment" />
 
 </navigation>
