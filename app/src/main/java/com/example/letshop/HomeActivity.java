@@ -52,6 +52,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        //setContentView(R.layout.items_fragment);
 
         Paper.init(this);
 
@@ -76,7 +77,7 @@ public class HomeActivity extends AppCompatActivity {
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_cart, R.id.nav_orders, R.id.nav_categories,
-                R.id.nav_settings, R.id.nav_logout)
+                R.id.nav_settings, R.id.nav_logout,R.id.nav_items)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -91,14 +92,14 @@ public class HomeActivity extends AppCompatActivity {
     private void InitialUI() {
         userNameTextView = headerView.findViewById(R.id.user_profile_name);
         profileImageView = headerView.findViewById(R.id.user_profile_image);
-        ProductRef = FirebaseDatabase.getInstance().getReference().child("Products");
+       /* ProductRef = FirebaseDatabase.getInstance().getReference().child("Products");
         recyclerView = findViewById(R.id.recycler_menu);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(layoutManager);*/
     }
 
-    @Override
+  /*  @Override
     protected void onStart() {
         super.onStart();
 
@@ -127,7 +128,7 @@ public class HomeActivity extends AppCompatActivity {
 
         recyclerView.setAdapter(adapter);
         adapter.startListening();
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
