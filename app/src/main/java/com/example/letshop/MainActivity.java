@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this,"Logged in successfully ",Toast.LENGTH_LONG).show();
                             loadingBar.dismiss();
 
+                            Prevalent.currentOnlineUser = usersData;
                             startActivity(new Intent(MainActivity.this,HomeActivity.class));
                         }else{
                             Toast.makeText(MainActivity.this,"Password incorrect ",Toast.LENGTH_LONG).show();
