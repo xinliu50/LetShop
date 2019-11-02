@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -21,21 +22,57 @@
             android:text="Product Name"
             android:textColor="@android:color/black"
             android:textStyle="bold"
-            android:textSize="15sp"
+            android:textSize="18sp"
             android:gravity="center"
             android:layout_marginTop="10dp"/>
 
         <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/product_name_details"
-        android:text="Product Description"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:textSize="15sp"
-        android:gravity="center"
-        android:layout_marginTop="10dp"/>
+            android:id="@+id/product_description_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_name_details"
+            android:text="Product Description"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:layout_marginTop="10dp"/>
 
+        <TextView
+            android:id="@+id/product_price_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_description_details"
+            android:text="Product Price"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:layout_marginTop="10dp"/>
+
+
+        <com.cepheuen.elegantnumberbutton.view.ElegantNumberButton
+            android:id="@+id/number_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="6dp"
+            app:textSize="16sp"
+            app:intialNumber="1"
+            app:finalNumber="10"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/product_price_details">
+        </com.cepheuen.elegantnumberbutton.view.ElegantNumberButton>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_product_to_cart_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="6dp"
+            android:backgroundTint="@android:color/white"
+            android:src="@drawable/nav_cart"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="15dp"/>
 
 
     </RelativeLayout>
