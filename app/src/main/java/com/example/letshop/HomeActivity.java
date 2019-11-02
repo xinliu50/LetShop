@@ -87,11 +87,13 @@ public class HomeActivity extends AppCompatActivity {
         InitialUI();
 
         userNameTextView.setText(Prevalent.currentOnlineUser.getName());
+        Picasso.get().load(Prevalent.currentOnlineUser.getImage()).placeholder(R.drawable.profile).into(profileImageView);
 
     }
     private void InitialUI() {
         userNameTextView = headerView.findViewById(R.id.user_profile_name);
         profileImageView = headerView.findViewById(R.id.user_profile_image);
+
        /* ProductRef = FirebaseDatabase.getInstance().getReference().child("Products");
         recyclerView = findViewById(R.id.recycler_menu);
         recyclerView.setHasFixedSize(true);

@@ -3,6 +3,9 @@ package com.example.letshop.ui.settings;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -10,21 +13,35 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.Toolbar;
 
+import com.example.letshop.HomeActivity;
 import com.example.letshop.Prevalent.Prevalent;
 import com.example.letshop.R;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
+
+import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -40,6 +57,8 @@ public class SettingsFragment extends Fragment {
     private String myUrl = "";
     private StorageReference storageProfilePictureRef;
     private String checker = "";
+    private StorageTask uploadTask;
+    private final static int Gallery_Pick = 1;
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
@@ -78,9 +97,64 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 checker = "clicked";
+
+//                CropImage.activity(imageUri)
+//                        .setAspectRatio(1,1)
+//                        .start(Fra);
+//                CropImage.activity()
+//                        .start(getContext(),this);
+
+                Intent galleryIntent = new Intent();
+                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+                galleryIntent.setType("image/*");
+                startActivityForResult(galleryIntent, Gallery_Pick);
             }
         });
         return root;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+//        if(requestCode==CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode== Activity.RESULT_OK && data != null){
+//            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+//            imageUri = result.getUri();
+//            profileImageView.setImageURI(imageUri);
+//        }else{
+//            Toast.makeText(getActivity(),"Try again...", Toast.LENGTH_LONG).show();
+//
+//            Fragment settingFragment = new Fragment();
+//            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//            transaction.replace(R.id.nav_settings, settingFragment);
+//            transaction.addToBackStack(null);
+//            transaction.commit();
+//        }
+
+        if(requestCode == Gallery_Pick && resultCode == Activity.RESULT_OK && data != null){
+            Uri ImageUri = data.getData();
+            CropImage.activity(ImageUri)
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setAspectRatio(1,1)
+                    .start(getContext(),this);
+        }
+        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if(resultCode == Activity.RESULT_OK){
+                imageUri = result.getUri();
+                profileImageView.setImageURI(imageUri);
+
+            }else{
+            Toast.makeText(getActivity(),"Try again...", Toast.LENGTH_LONG).show();
+
+            Fragment settingFragment = new Fragment();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.nav_settings, settingFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+          }
+        }
+
     }
 
     @Override
@@ -99,6 +173,7 @@ public class SettingsFragment extends Fragment {
         closeTextBtn = (TextView) root.findViewById(R.id.close_settings_btn);
         saveTextButton = (TextView) root.findViewById(R.id.update_account_settings);
 
+        storageProfilePictureRef = FirebaseStorage.getInstance().getReference().child("Profile_pictures");
         userInfoDisplay(profileImageView,fullNameEditText,userPhoneEditText,addressEditText);
     }
 
@@ -130,8 +205,96 @@ public class SettingsFragment extends Fragment {
     }
 
     private void updateOnlyUserInfo() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Users");
+
+        HashMap<String, Object> userMap = new HashMap<>();
+        userMap.put("name",fullNameEditText.getText().toString());
+        userMap.put("address",addressEditText.getText().toString());
+        userMap.put("phoneOrder",userPhoneEditText.getText().toString());
+        ref.child(Prevalent.currentOnlineUser.getPhone()).updateChildren(userMap);
+
+
+//        Fragment itemFragment = new Fragment();
+//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//        transaction.replace(R.id.nav_items, itemFragment);
+//        transaction.addToBackStack(null);
+//        transaction.commit();
+
+        startActivity(new Intent(getActivity(), HomeActivity.class));
+
+        Toast.makeText(getActivity(),"Profile info updated successfully...",Toast.LENGTH_LONG).show();
     }
 
     private void userInfoSaved() {
+        if(TextUtils.isEmpty(fullNameEditText.getText().toString())){
+            Toast.makeText(getActivity(),"Name is mandatory", Toast.LENGTH_LONG).show();
+        }else if(TextUtils.isEmpty(addressEditText.getText().toString())){
+            Toast.makeText(getActivity(),"Address is mandatory", Toast.LENGTH_LONG).show();
+        }else if(TextUtils.isEmpty(userPhoneEditText.getText().toString())){
+            Toast.makeText(getActivity(),"Phone is mandatory", Toast.LENGTH_LONG).show();
+        }else if(checker.equals("clicked")){
+            uploadImage();
+        }
+    }
+
+    private void uploadImage() {
+        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setTitle("Update Profile");
+        progressDialog.setMessage("Please wait......");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+        if(imageUri != null){
+            final StorageReference fileRef = storageProfilePictureRef
+                    .child(Prevalent.currentOnlineUser.getPhone() + ".jpg");
+
+            uploadTask = fileRef.putFile(imageUri);
+            uploadTask.continueWithTask(new Continuation() {
+                @Override
+                public Object then(@NonNull Task task) throws Exception {
+                    if(!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+                    return fileRef.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if(task.isSuccessful()){
+                        Uri downloadUrl = task.getResult();
+                        myUrl = downloadUrl.toString();
+                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Users");
+
+                        HashMap<String, Object> userMap = new HashMap<>();
+                        userMap.put("name",fullNameEditText.getText().toString());
+                        userMap.put("address",addressEditText.getText().toString());
+                        userMap.put("phoneOrder",userPhoneEditText.getText().toString());
+                        userMap.put("image",myUrl);
+                        ref.child(Prevalent.currentOnlineUser.getPhone()).updateChildren(userMap);
+
+                        progressDialog.dismiss();
+
+//                        Fragment itemFragment = new Fragment();
+//                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                        transaction.replace(R.id.nav_items, itemFragment);
+//                        transaction.addToBackStack(null);
+//                        transaction.commit();
+
+                        startActivity(new Intent(getActivity(), HomeActivity.class));
+
+                        Toast.makeText(getActivity(),"Profile info updated successfully...",Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        progressDialog.dismiss();
+                        Toast.makeText(getActivity(),"Error...",Toast.LENGTH_LONG).show();
+
+                    }
+                }
+            });
+        }
+        else{
+            Toast.makeText(getActivity(),"Image not selected...",Toast.LENGTH_LONG).show();
+
+        }
     }
 }

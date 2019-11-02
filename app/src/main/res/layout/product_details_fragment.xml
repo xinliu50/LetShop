@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.productDetails.productDetailsFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/product_image_details"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:scaleType="centerCrop"/>
+        <TextView
+            android:id="@+id/product_name_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_image_details"
+            android:text="Product Name"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/product_name_details"
+        android:text="Product Description"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:layout_marginTop="10dp"/>
+
+
+
+    </RelativeLayout>
+</FrameLayout>
