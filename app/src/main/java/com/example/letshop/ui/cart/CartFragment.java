@@ -1,7 +1,10 @@
 package com.example.letshop.ui.cart;
 
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,13 +18,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.letshop.Model.Cart;
 import com.example.letshop.Prevalent.Prevalent;
 import com.example.letshop.R;
 import com.example.letshop.ViewHolder.CartViewHolder;
+import com.example.letshop.ui.items.ItemsFragment;
+import com.example.letshop.ui.productDetails.productDetailsFragment;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -79,11 +87,61 @@ public class CartFragment extends Fragment {
         FirebaseRecyclerAdapter<Cart, CartViewHolder> adapter
                 = new FirebaseRecyclerAdapter<Cart, CartViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull CartViewHolder holder, int position, @NonNull Cart model) {
+            protected void onBindViewHolder(@NonNull CartViewHolder holder, int position, @NonNull final Cart model) {
                 holder.txtProductQuantity.setText("Quantity = "+model.getQuantity());
                 holder.txtProductPrice.setText("Price "+model.getPrice()+"$");
                 holder.txtProductName.setText(model.getPname());
 
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        CharSequence options[] = new CharSequence[]
+                                {
+                                  "Edit",
+                                  "Remove"
+                                };
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle("Cart Options:");
+                        builder.setItems(options, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(which == 0){
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("pid",model.getPid());
+
+                                    Fragment productDetailFragment = new productDetailsFragment();
+                                    productDetailFragment.setArguments(bundle);
+                                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                                    transaction.replace(R.id.nav_host_fragment, productDetailFragment);
+                                    transaction.addToBackStack(null);
+                                    transaction.commit();
+                                }
+                                if(which == 1){
+                                    cartListRef.child("User_View")
+                                            .child(Prevalent.currentOnlineUser.getPhone()).child("Products")
+                                            .child(model.getPid())
+                                            .removeValue()
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if(task.isSuccessful()){
+                                                        Toast.makeText(getActivity(),"Item removed...", Toast.LENGTH_LONG).show();
+
+                                                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                                                        transaction.replace(R.id.nav_host_fragment, new CartFragment());
+                                                        transaction.addToBackStack(null);
+                                                        transaction.commit();
+
+                                                    }
+                                                }
+                                            });
+                                }
+                            }
+                        });
+
+                        builder.show();
+                    }
+                });
             }
 
             @NonNull
