@@ -26,6 +26,7 @@ import android.widget.Toolbar;
 import com.example.letshop.HomeActivity;
 import com.example.letshop.Prevalent.Prevalent;
 import com.example.letshop.R;
+import com.example.letshop.ui.items.ItemsFragment;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -74,9 +75,9 @@ public class SettingsFragment extends Fragment {
         closeTextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment itemFragment = new Fragment();
+                //Fragment itemFragment = new Fragment();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.nav_items, itemFragment);
+                transaction.replace(R.id.nav_host_fragment, new ItemsFragment());
                 transaction.addToBackStack(null);
                 transaction.commit();
             }

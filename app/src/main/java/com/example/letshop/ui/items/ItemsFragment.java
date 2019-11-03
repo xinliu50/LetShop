@@ -1,5 +1,6 @@
 package com.example.letshop.ui.items;
 
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import com.example.letshop.Model.Products;
 import com.example.letshop.R;
 import com.example.letshop.ViewHolder.ProductViewHolder;
+import com.example.letshop.ui.productDetails.productDetailsFragment;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
@@ -68,12 +70,26 @@ public class ItemsFragment extends Fragment {
 
         FirebaseRecyclerAdapter<Products, ProductViewHolder> adapter = new FirebaseRecyclerAdapter<Products, ProductViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull Products model) {
+            protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull final Products model) {
                 holder.txtProductName.setText(model.getPname());
                 holder.txtProductPrice.setText("Price = " + model.getPrice() + "$");
                 holder.txtProductDescription.setText(model.getDescription());
 
                 Picasso.get().load(model.getImage()).into(holder.imageView);
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("pid",model.getPid());
+
+                        Fragment productDetailFragment = new productDetailsFragment();
+                        productDetailFragment.setArguments(bundle);
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.nav_host_fragment, productDetailFragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
+                });
             }
 
             @NonNull

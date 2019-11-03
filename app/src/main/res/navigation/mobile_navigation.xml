@@ -33,13 +33,19 @@
     <fragment
         android:id="@+id/nav_settings"
         android:name="com.example.letshop.ui.settings.SettingsFragment"
-        android:label="@string/menu_tools"
+        android:label="Settings"
         tools:layout="@layout/settings_fragment" />
 
     <fragment
         android:id="@+id/nav_logout"
         android:name="com.example.letshop.ui.logout.LogoutFragment"
-        android:label="@string/menu_share"
+        android:label="logout"
         tools:layout="@layout/logout_fragment" />
+
+    <fragment
+        android:id="@+id/nav_product_details"
+        android:name="com.example.letshop.ui.productDetails.productDetailsFragment"
+        android:label="Product Details"
+        tools:layout="@layout/product_details_fragment" />
 
 </navigation>
