@@ -16,7 +16,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.letshop.Model.Cart;
+import com.example.letshop.Prevalent.Prevalent;
 import com.example.letshop.R;
+import com.example.letshop.ViewHolder.CartViewHolder;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.w3c.dom.Text;
 
@@ -39,6 +46,8 @@ public class CartFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.cart_fragment, container, false);
         InitialUI();
+
+        DisplayList();
         return root;
     }
 
@@ -56,7 +65,38 @@ public class CartFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(CartViewModel.class);
-        // TODO: Use the ViewModel
+
+    }
+
+    private void DisplayList() {
+
+        final DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart_List");
+
+        FirebaseRecyclerOptions<Cart> options = new FirebaseRecyclerOptions.Builder<Cart>()
+                .setQuery(cartListRef.child("User_View").child(Prevalent.currentOnlineUser.getPhone())
+                        .child("Products"),Cart.class).build();
+
+        FirebaseRecyclerAdapter<Cart, CartViewHolder> adapter
+                = new FirebaseRecyclerAdapter<Cart, CartViewHolder>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull CartViewHolder holder, int position, @NonNull Cart model) {
+                holder.txtProductQuantity.setText("Quantity = "+model.getQuantity());
+                holder.txtProductPrice.setText("Price "+model.getPrice()+"$");
+                holder.txtProductName.setText(model.getPname());
+
+            }
+
+            @NonNull
+            @Override
+            public CartViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cart_items_layout,parent,false);
+                CartViewHolder holder = new CartViewHolder(view);
+                return holder;
+            }
+        };
+
+        recyclerView.setAdapter(adapter);
+        adapter.startListening();
     }
 
 }

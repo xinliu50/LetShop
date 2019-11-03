@@ -5,6 +5,8 @@ import android.os.Bundle;
 import com.example.letshop.Model.Products;
 import com.example.letshop.Prevalent.Prevalent;
 import com.example.letshop.ViewHolder.ProductViewHolder;
+import com.example.letshop.ui.cart.CartFragment;
+import com.example.letshop.ui.productDetails.productDetailsFragment;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -81,6 +83,7 @@ public class HomeActivity extends AppCompatActivity {
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.nav_host_fragment,new Fragment());
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
         InitialUI();
@@ -89,8 +92,10 @@ public class HomeActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.nav_host_fragment,new CartFragment());
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 
