@@ -25,6 +25,7 @@ import com.example.letshop.Prevalent.Prevalent;
 import com.example.letshop.R;
 import com.example.letshop.ViewHolder.CartViewHolder;
 import com.example.letshop.ui.items.ItemsFragment;
+import com.example.letshop.ui.orders.OrdersFragment;
 import com.example.letshop.ui.productDetails.productDetailsFragment;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -44,6 +45,7 @@ public class CartFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private Button NextProcessBtn;
     private TextView txtTotalAmount;
+    private double overTotalPrice = 0.0;
 
     public static CartFragment newInstance() {
         return new CartFragment();
@@ -67,6 +69,24 @@ public class CartFragment extends Fragment {
 
         NextProcessBtn = (Button)root.findViewById(R.id.next_process_btn);
         txtTotalAmount = (TextView)root.findViewById(R.id.total_price);
+
+        NextProcessBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                txtTotalAmount.setText("Total Price = $"+ String.valueOf(overTotalPrice));
+
+                Bundle bundle = new Bundle();
+                bundle.putDouble("Total Price",overTotalPrice);
+
+                Fragment orderFragment = new OrdersFragment();
+                orderFragment.setArguments(bundle);
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.nav_host_fragment, orderFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
     }
 
     @Override
@@ -91,6 +111,9 @@ public class CartFragment extends Fragment {
                 holder.txtProductQuantity.setText("Quantity = "+model.getQuantity());
                 holder.txtProductPrice.setText("Price "+model.getPrice()+"$");
                 holder.txtProductName.setText(model.getPname());
+
+                double oneTypeProductTPrice = ((Double.valueOf(model.getPrice()))) * Integer.valueOf(model.getQuantity());
+                overTotalPrice = overTotalPrice + oneTypeProductTPrice;
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
