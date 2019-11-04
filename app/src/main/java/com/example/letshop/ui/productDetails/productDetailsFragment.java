@@ -46,7 +46,7 @@ public class productDetailsFragment extends Fragment {
     private ImageView productImage;
     private ElegantNumberButton numberButton;
     private TextView productPrice, productDescription,productName;
-    private String productID = "";
+    private String productID = "", state = "Normal";
     private Button addToCartButton;
 
     public static productDetailsFragment newInstance() {
@@ -65,9 +65,14 @@ public class productDetailsFragment extends Fragment {
        addToCartButton.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               addingToCartList();
+               if(state.equals("Order Placed") || state.equals("Order Shipped")){
+                   Toast.makeText(getActivity(),"You can order more product once your order is confirmed",Toast.LENGTH_LONG).show();
+               }else{
+                   addingToCartList();
+               }
            }
        });
+       CheckOrderState();
        return root;
     }
 
@@ -164,6 +169,31 @@ public class productDetailsFragment extends Fragment {
                     }
                 });
 
+    }
+
+    private void CheckOrderState(){
+        DatabaseReference ordersRef;
+        ordersRef = FirebaseDatabase.getInstance().getReference().child("Orders").child(Prevalent.currentOnlineUser.getPhone());
+        ordersRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    String shippingState = dataSnapshot.child("state").getValue().toString();
+
+                    if(shippingState.equals("shipped")){
+                        state = "Order Shipped";
+
+                    }else if(shippingState.equals("not shipped")){
+                        state = "Order Placed";
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }
