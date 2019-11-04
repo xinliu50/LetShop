@@ -31,8 +31,11 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
@@ -44,7 +47,7 @@ public class CartFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private Button NextProcessBtn;
-    private TextView txtTotalAmount;
+    private TextView txtTotalAmount, txtMsg1;
     private double overTotalPrice = 0.0;
 
     public static CartFragment newInstance() {
@@ -57,6 +60,7 @@ public class CartFragment extends Fragment {
         root = inflater.inflate(R.layout.cart_fragment, container, false);
         InitialUI();
 
+        CheckOrderState();
         DisplayList();
         return root;
     }
@@ -69,22 +73,24 @@ public class CartFragment extends Fragment {
 
         NextProcessBtn = (Button)root.findViewById(R.id.next_process_btn);
         txtTotalAmount = (TextView)root.findViewById(R.id.total_price);
+        txtMsg1 = (TextView)root.findViewById(R.id.msg1);
 
         NextProcessBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(overTotalPrice != 0){
+                    Bundle bundle = new Bundle();
+                    bundle.putDouble("Total Price",overTotalPrice);
 
-                txtTotalAmount.setText("Total Price = $"+ String.valueOf(overTotalPrice));
-
-                Bundle bundle = new Bundle();
-                bundle.putDouble("Total Price",overTotalPrice);
-
-                Fragment orderFragment = new OrdersFragment();
-                orderFragment.setArguments(bundle);
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.nav_host_fragment, orderFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                    Fragment orderFragment = new OrdersFragment();
+                    orderFragment.setArguments(bundle);
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.nav_host_fragment, orderFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }else{
+                    Toast.makeText(getActivity(),"Order Cart is empty...",Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -165,6 +171,7 @@ public class CartFragment extends Fragment {
                         builder.show();
                     }
                 });
+                txtTotalAmount.setText("Total Price = $"+ String.valueOf(overTotalPrice));
             }
 
             @NonNull
@@ -178,6 +185,41 @@ public class CartFragment extends Fragment {
 
         recyclerView.setAdapter(adapter);
         adapter.startListening();
+    }
+
+    private void CheckOrderState(){
+        DatabaseReference ordersRef;
+        ordersRef = FirebaseDatabase.getInstance().getReference().child("Orders").child(Prevalent.currentOnlineUser.getPhone());
+        ordersRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    String shippingState = dataSnapshot.child("state").getValue().toString();
+                    String userName = dataSnapshot.child("name").getValue().toString();
+
+                    if(shippingState.equals("shipped")){
+                        txtTotalAmount.setText("Dear "+userName+"\n order is shipped successfully..");
+                        recyclerView.setVisibility(View.GONE);
+
+                        txtMsg1.setVisibility(View.VISIBLE);
+                        txtMsg1.setText("Congratulations, your final order has been Shipped successfully. Soon you will receive your order");
+                        NextProcessBtn.setVisibility(View.GONE);
+
+                    }else if(shippingState.equals("not shipped")){
+                        txtTotalAmount.setText("Shipping state: Not Shipped");
+                        recyclerView.setVisibility(View.GONE);
+
+                        txtMsg1.setVisibility(View.VISIBLE);
+                        NextProcessBtn.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }
