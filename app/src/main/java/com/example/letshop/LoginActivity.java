@@ -114,6 +114,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.child(parentDbName).child(phone).exists()){
+                    Log.d("status",phone);
                     Users usersData = dataSnapshot.child(parentDbName).child(phone).getValue(Users.class);
                     if(usersData.getPhone().equals(phone)){
                         if(usersData.getPassword().equals(password)){
