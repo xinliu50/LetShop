@@ -122,14 +122,24 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(LoginActivity.this,"Admin Logged in successfully ",Toast.LENGTH_LONG).show();
                                 loadingBar.dismiss();
 
-                                startActivity(new Intent(LoginActivity.this,AdminCategoryActivity.class));
+
+                                Intent intent = new Intent(LoginActivity.this,AdminCategoryActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+
                             }else if(parentDbName.equals("Users")){
                                 Toast.makeText(LoginActivity.this,"User Logged in successfully ",Toast.LENGTH_LONG).show();
                                 loadingBar.dismiss();
 
                                 Prevalent.currentOnlineUser = usersData;
 
-                                startActivity(new Intent(LoginActivity.this,HomeActivity.class));
+
+                                Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+                                //intent.putExtra("Type","User");
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
                             }
                         }else{
                             Toast.makeText(LoginActivity.this,"Password incorrect ",Toast.LENGTH_LONG).show();

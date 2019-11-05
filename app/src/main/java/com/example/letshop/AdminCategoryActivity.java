@@ -1,12 +1,17 @@
 package com.example.letshop;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import com.example.letshop.ui.items.ItemsFragment;
+import com.example.letshop.ui.productDetails.productDetailsFragment;
 
 import io.paperdb.Paper;
 
@@ -15,7 +20,7 @@ public class AdminCategoryActivity extends AppCompatActivity {
     private ImageView tShirts, sportsTShirts, femalDresses, sweaters;
     private ImageView glasses, hatsCaps, walletsBagsPurses, shoes;
     private ImageView headPhonesHandFree, Laptops, watches, mobilePhones;
-    private Button LogoutBtn, CheckOrdersBtn;
+    private Button LogoutBtn, CheckOrdersBtn, maintainProductsBtn;
 
 
     @Override
@@ -45,6 +50,7 @@ public class AdminCategoryActivity extends AppCompatActivity {
 
         LogoutBtn = (Button)findViewById(R.id.admin_logout_btn);
         CheckOrdersBtn = (Button)findViewById(R.id.check_order_btn);
+        maintainProductsBtn = (Button)findViewById(R.id.maintain_btn);
 
         LogoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,6 +175,15 @@ public class AdminCategoryActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(AdminCategoryActivity.this, AdminAddNewProductActivity.class);
                 intent.putExtra("category","Mobile Phones");
+                startActivity(intent);
+            }
+        });
+
+        maintainProductsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdminCategoryActivity.this, HomeActivity.class);
+                intent.putExtra("Type","Admin");
                 startActivity(intent);
             }
         });

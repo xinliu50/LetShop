@@ -1,5 +1,6 @@
 package com.example.letshop;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.letshop.Model.Products;
@@ -13,9 +14,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
@@ -42,7 +45,7 @@ import android.widget.TextView;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.paperdb.Paper;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private AppBarConfiguration mAppBarConfiguration;
     private View headerView;
@@ -51,61 +54,72 @@ public class HomeActivity extends AppCompatActivity {
     private DatabaseReference ProductRef;
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
+    private String type = "";
+    DrawerLayout drawer;
+    NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        //setContentView(R.layout.items_fragment);
 
         Paper.init(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Home");
+//        toolbar.setTitle("Home");
         setSupportActionBar(toolbar);
 
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         headerView = navigationView.getHeaderView(0);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_cart, R.id.nav_orders, R.id.nav_categories,
                 R.id.nav_settings, R.id.nav_logout,R.id.nav_items,R.id.nav_search)
                 .setDrawerLayout(drawer)
                 .build();
 
+        InitialUI();
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        Bundle bundle = new Bundle();
+        bundle.putString("key",type);
+
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController.setGraph(R.navigation.mobile_navigation,bundle);
+
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+       // NavigationUI.setupActionBarWithNavController(this, navController, drawer);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.nav_host_fragment,new Fragment());
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        navigationView.setNavigationItemSelectedListener(this);
 
-        InitialUI();
+
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.nav_host_fragment,new CartFragment());
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                navController.navigate(R.id.nav_cart);
             }
         });
 
-        userNameTextView.setText(Prevalent.currentOnlineUser.getName());
-        Picasso.get().load(Prevalent.currentOnlineUser.getImage()).placeholder(R.drawable.profile).into(profileImageView);
+        if(Prevalent.currentOnlineUser != null) {
+            userNameTextView.setText(Prevalent.currentOnlineUser.getName());
+            Picasso.get().load(Prevalent.currentOnlineUser.getImage()).placeholder(R.drawable.profile).into(profileImageView);
+        }
 
     }
     private void InitialUI() {
         userNameTextView = headerView.findViewById(R.id.user_profile_name);
         profileImageView = headerView.findViewById(R.id.user_profile_image);
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if(bundle != null){
+            type = getIntent().getExtras().get("Type").toString();
+        }
+
+       // type = getIntent().getExtras().get("Type").toString();
+
 
        /* ProductRef = FirebaseDatabase.getInstance().getReference().child("Products");
         recyclerView = findViewById(R.id.recycler_menu);
@@ -114,40 +128,9 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);*/
     }
 
-  /*  @Override
-    protected void onStart() {
-        super.onStart();
-
-        FirebaseRecyclerOptions<Products> options = new FirebaseRecyclerOptions.Builder<Products>()
-                .setQuery(ProductRef,Products.class)
-                .build();
-
-        FirebaseRecyclerAdapter<Products, ProductViewHolder> adapter = new FirebaseRecyclerAdapter<Products, ProductViewHolder>(options) {
-            @Override
-            protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull Products model) {
-                holder.txtProductName.setText(model.getPname());
-                holder.txtProductPrice.setText("Price = " + model.getPrice() + "$");
-                holder.txtProductDescription.setText(model.getDescription());
-
-                Picasso.get().load(model.getImage()).into(holder.imageView);
-            }
-
-            @NonNull
-            @Override
-            public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_items_layout,parent,false);
-                 ProductViewHolder holder = new ProductViewHolder(view);
-                 return holder;
-            }
-        };
-
-        recyclerView.setAdapter(adapter);
-        adapter.startListening();
-    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
         return true;
     }
@@ -157,5 +140,51 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        navController.navigate(R.id.nav_items);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+        menuItem.setChecked(true);
+
+        drawer.closeDrawers();
+
+        int id = menuItem.getItemId();
+
+        switch (id) {
+
+            case R.id.items:
+                navController.navigate(R.id.nav_items);
+                break;
+
+            case R.id.cart:
+                navController.navigate(R.id.nav_cart);
+                break;
+
+            case R.id.orders:
+                navController.navigate(R.id.nav_orders);
+                break;
+            case R.id.categories:
+                navController.navigate(R.id.nav_categories);
+                break;
+            case R.id.settings:
+                navController.navigate(R.id.nav_settings);
+                break;
+            case R.id.search:
+                navController.navigate(R.id.nav_search);
+                break;
+            case R.id.logout:
+                navController.navigate(R.id.nav_logout);
+                break;
+
+        }
+        return true;
+
     }
 }

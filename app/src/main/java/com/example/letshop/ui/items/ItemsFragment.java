@@ -3,6 +3,7 @@ package com.example.letshop.ui.items;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,10 +12,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.letshop.AdminMaintainProductsActivity;
 import com.example.letshop.Model.Products;
 import com.example.letshop.R;
 import com.example.letshop.ViewHolder.ProductViewHolder;
@@ -32,9 +35,20 @@ public class ItemsFragment extends Fragment {
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     private View root;
+    private String type = "";
 
     public static ItemsFragment newInstance() {
         return new ItemsFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle bundle = this.getArguments();
+        if(bundle != null){
+            type = bundle.getString("key");
+        }
     }
 
     @Override
@@ -79,15 +93,20 @@ public class ItemsFragment extends Fragment {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("pid",model.getPid());
+                        if(type.equals("Admin")){
+                            Log.d("status","admin");
+                            startActivity(new Intent(getActivity(), AdminMaintainProductsActivity.class));
+                        }else {
+                            Bundle bundle = new Bundle();
+                            bundle.putString("pid", model.getPid());
 
-                        Fragment productDetailFragment = new productDetailsFragment();
-                        productDetailFragment.setArguments(bundle);
-                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                        transaction.replace(R.id.nav_host_fragment, productDetailFragment);
-                        transaction.addToBackStack(null);
-                        transaction.commit();
+                            Fragment productDetailFragment = new productDetailsFragment();
+                            productDetailFragment.setArguments(bundle);
+                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                            transaction.replace(R.id.nav_host_fragment, productDetailFragment);
+                            transaction.addToBackStack(null);
+                            transaction.commit();
+                        }
                     }
                 });
             }
