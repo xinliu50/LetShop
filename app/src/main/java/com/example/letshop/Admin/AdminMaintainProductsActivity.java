@@ -1,4 +1,4 @@
-package com.example.letshop;
+package com.example.letshop.Admin;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,8 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
+import com.example.letshop.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -23,8 +23,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.HashMap;
 
 public class AdminMaintainProductsActivity extends AppCompatActivity {
@@ -128,7 +126,7 @@ public class AdminMaintainProductsActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
                         Toast.makeText(AdminMaintainProductsActivity.this,"Changes applied...",Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(AdminMaintainProductsActivity.this,AdminHomeActivity.class));
+                        startActivity(new Intent(AdminMaintainProductsActivity.this, AdminHomeActivity.class));
                         finish();
                     }
                 }

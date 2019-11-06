@@ -1,4 +1,4 @@
-package com.example.letshop;
+package com.example.letshop.Admin;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.letshop.R;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -185,7 +186,7 @@ public class AdminAddNewProductActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
                             loadingBar.dismiss();
-                            startActivity(new Intent(AdminAddNewProductActivity.this,AdminCategoryActivity.class));
+                            startActivity(new Intent(AdminAddNewProductActivity.this, AdminCategoryActivity.class));
                             Toast.makeText(AdminAddNewProductActivity.this,"Product is added successfully...",Toast.LENGTH_LONG).show();
                         }
                         else{

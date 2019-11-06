@@ -18,6 +18,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ import android.widget.Toolbar;
 import com.example.letshop.HomeActivity;
 import com.example.letshop.Prevalent.Prevalent;
 import com.example.letshop.R;
+import com.example.letshop.ResetPasswordActivity;
 import com.example.letshop.ui.items.ItemsFragment;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -60,6 +62,7 @@ public class SettingsFragment extends Fragment {
     private String checker = "";
     private StorageTask uploadTask;
     private final static int Gallery_Pick = 1;
+    private Button securityQuestionBtn;
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
@@ -109,6 +112,15 @@ public class SettingsFragment extends Fragment {
                 galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
                 galleryIntent.setType("image/*");
                 startActivityForResult(galleryIntent, Gallery_Pick);
+            }
+        });
+
+        securityQuestionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),ResetPasswordActivity.class);
+                intent.putExtra("settings","check");
+                startActivity(intent);
             }
         });
         return root;
@@ -173,6 +185,7 @@ public class SettingsFragment extends Fragment {
         profileChangeTextBtn = (TextView) root.findViewById(R.id.profile_image_change_btn);
         closeTextBtn = (TextView) root.findViewById(R.id.close_settings_btn);
         saveTextButton = (TextView) root.findViewById(R.id.update_account_settings);
+        securityQuestionBtn = (Button)root.findViewById(R.id.security_questions_btn);
 
         storageProfilePictureRef = FirebaseStorage.getInstance().getReference().child("Profile_pictures");
         userInfoDisplay(profileImageView,fullNameEditText,userPhoneEditText,addressEditText);

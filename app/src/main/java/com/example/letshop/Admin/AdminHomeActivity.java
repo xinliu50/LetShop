@@ -1,10 +1,8 @@
-package com.example.letshop;
+package com.example.letshop.Admin;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,8 +14,8 @@ import android.view.ViewGroup;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.letshop.Model.Products;
+import com.example.letshop.R;
 import com.example.letshop.ViewHolder.ProductViewHolder;
-import com.example.letshop.ui.productDetails.productDetailsFragment;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;

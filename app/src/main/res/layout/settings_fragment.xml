@@ -100,6 +100,19 @@
             android:layout_margin="15dp"
             android:padding="10dp"/>
 
+        <Button
+            android:id="@+id/security_questions_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/settings_address"
+            android:text="Set Security Questions"
+            android:background="@drawable/buttons"
+            android:layout_margin="15dp"
+            android:textColor="@android:color/white"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:padding="10dp"/>
+
     </RelativeLayout>
 
 </FrameLayout>

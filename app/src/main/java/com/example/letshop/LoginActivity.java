@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.letshop.Admin.AdminCategoryActivity;
 import com.example.letshop.Model.Users;
 import com.example.letshop.Prevalent.Prevalent;
 import com.google.firebase.database.DataSnapshot;
@@ -22,8 +23,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.w3c.dom.Text;
 
 import io.paperdb.Paper;
 
@@ -34,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog loadingBar;
     private String parentDbName = "Users";
     private CheckBox chkBoxRememberMe;
-    private TextView AdminLink, NotAdminLink;
+    private TextView AdminLink, NotAdminLink, ForgetPasswordLink;
 
 
     @Override
@@ -70,6 +69,15 @@ public class LoginActivity extends AppCompatActivity {
                 parentDbName = "Users";
             }
         });
+
+        ForgetPasswordLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this,ResetPasswordActivity.class);
+                intent.putExtra("login","check");
+                startActivity(intent);
+            }
+        });
     }
 
     private void InitialUI() {
@@ -82,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
 
         AdminLink = (TextView)findViewById(R.id.admin_panel_link);
         NotAdminLink = (TextView)findViewById(R.id.not_admin_panel_link);
+        ForgetPasswordLink = (TextView)findViewById(R.id.forget_password_link);
     }
 
     private void LoginUser() {
@@ -124,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
                                 loadingBar.dismiss();
 
 
-                                Intent intent = new Intent(LoginActivity.this,AdminCategoryActivity.class);
+                                Intent intent = new Intent(LoginActivity.this, AdminCategoryActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                                 finish();

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.letshop.Admin.AdminCategoryActivity;
 import com.example.letshop.Model.Users;
 import com.example.letshop.Prevalent.Prevalent;
 import com.google.firebase.database.DataSnapshot;
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                             if(userType.equals("Users"))
                                 startActivity(new Intent(MainActivity.this,HomeActivity.class));
                             else if(userType.equals("Admins"))
-                                startActivity(new Intent(MainActivity.this,AdminCategoryActivity.class));
+                                startActivity(new Intent(MainActivity.this, AdminCategoryActivity.class));
                         }else{
                             Toast.makeText(MainActivity.this,"Password incorrect ",Toast.LENGTH_LONG).show();
                             loadingBar.dismiss();

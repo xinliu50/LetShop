@@ -1,8 +1,6 @@
-package com.example.letshop;
+package com.example.letshop.Admin;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,8 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.example.letshop.ui.items.ItemsFragment;
-import com.example.letshop.ui.productDetails.productDetailsFragment;
+import com.example.letshop.MainActivity;
+import com.example.letshop.R;
 
 import io.paperdb.Paper;
 
