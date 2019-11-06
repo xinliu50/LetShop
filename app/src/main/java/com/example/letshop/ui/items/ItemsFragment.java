@@ -94,8 +94,10 @@ public class ItemsFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         if(type.equals("Admin")){
-                            Log.d("status","admin");
-                            startActivity(new Intent(getActivity(), AdminMaintainProductsActivity.class));
+
+                            Intent intent = new Intent(getActivity(), AdminMaintainProductsActivity.class);
+                            intent.putExtra("pid",model.getPid());
+                            startActivity(intent);
                         }else {
                             Bundle bundle = new Bundle();
                             bundle.putString("pid", model.getPid());
