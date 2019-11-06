@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,7 +29,7 @@ import java.util.HashMap;
 
 public class AdminMaintainProductsActivity extends AppCompatActivity {
 
-    private Button applyChangesBtn;
+    private Button applyChangesBtn, deleteBtn;
     private EditText name, price, description;
     private ImageView imageView;
     private String productID = "";
@@ -49,10 +50,18 @@ public class AdminMaintainProductsActivity extends AppCompatActivity {
                 applyChanges();
             }
         });
+
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteProduct();
+            }
+        });
     }
 
     private void InitialUI() {
         applyChangesBtn = (Button)findViewById(R.id.ally_changes_btn);
+        deleteBtn = (Button)findViewById(R.id.delete_product_btn);
         name = (EditText)findViewById(R.id.product_name_maintain);
         price = (EditText)findViewById(R.id.product_Price_maintain);
         description = (EditText)findViewById(R.id.product_Description_maintain);
@@ -125,6 +134,19 @@ public class AdminMaintainProductsActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void deleteProduct() {
+        productRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(AdminMaintainProductsActivity.this,"Deleted product successfully...",Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(AdminMaintainProductsActivity.this,AdminHomeActivity.class));
+                    finish();
+                }
+            }
+        });
     }
 
 }
