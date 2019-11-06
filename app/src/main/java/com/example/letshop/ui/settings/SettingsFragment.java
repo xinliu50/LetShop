@@ -119,7 +119,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(),ResetPasswordActivity.class);
-                intent.putExtra("settings","check");
+                intent.putExtra("check", "settings");
                 startActivity(intent);
             }
         });
