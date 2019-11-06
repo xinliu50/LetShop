@@ -49,15 +49,16 @@ public class MainActivity extends AppCompatActivity {
 
         String UserPhoneKey = Paper.book().read(Prevalent.UserPhoneKey);
         String UserPasswordKey = Paper.book().read(Prevalent.UserPasswordKey);
+        String UserType = Paper.book().read(Prevalent.UserType);
 
-        if(UserPhoneKey != "" && UserPasswordKey != ""){
-            if(!TextUtils.isEmpty(UserPhoneKey) && !TextUtils.isEmpty(UserPasswordKey)){
+        if(UserPhoneKey != "" && UserPasswordKey != "" && UserType != ""){
+            if(!TextUtils.isEmpty(UserPhoneKey) && !TextUtils.isEmpty(UserPasswordKey) && !TextUtils.isEmpty(UserType)){
                 loadingBar.setTitle("Already Logged in");
                 loadingBar.setMessage("Please wait....");
                 loadingBar.setCanceledOnTouchOutside(false);
                 loadingBar.show();
 
-                AllowAccess(UserPhoneKey,UserPasswordKey);
+                AllowAccess(UserPhoneKey,UserPasswordKey,UserType);
             }
         }
     }
@@ -69,22 +70,27 @@ public class MainActivity extends AppCompatActivity {
         loadingBar = new ProgressDialog(this);
     }
 
-    private void AllowAccess(final String phone, final String password) {
+    private void AllowAccess(final String phone, final String password, final String type) {
         final DatabaseReference RootRef;
         RootRef = FirebaseDatabase.getInstance().getReference();
+        final String userType = type;
+
 
         RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child("Users").child(phone).exists()){
-                    Users usersData = dataSnapshot.child("Users").child(phone).getValue(Users.class);
+                if(dataSnapshot.child(userType).child(phone).exists()){
+                    Users usersData = dataSnapshot.child(userType).child(phone).getValue(Users.class);
                     if(usersData.getPhone().equals(phone)){
                         if(usersData.getPassword().equals(password)){
                             Toast.makeText(MainActivity.this,"Logged in successfully ",Toast.LENGTH_LONG).show();
                             loadingBar.dismiss();
 
                             Prevalent.currentOnlineUser = usersData;
-                            startActivity(new Intent(MainActivity.this,HomeActivity.class));
+                            if(userType.equals("Users"))
+                                startActivity(new Intent(MainActivity.this,HomeActivity.class));
+                            else if(userType.equals("Admins"))
+                                startActivity(new Intent(MainActivity.this,AdminCategoryActivity.class));
                         }else{
                             Toast.makeText(MainActivity.this,"Password incorrect ",Toast.LENGTH_LONG).show();
                             loadingBar.dismiss();

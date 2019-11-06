@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,11 +58,10 @@ public class AdminMaintainProductsActivity extends AppCompatActivity {
         description = (EditText)findViewById(R.id.product_Description_maintain);
         imageView = (ImageView) findViewById(R.id.product_image_maintain);
 
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        if(bundle != null){
-            productID = getIntent().getStringExtra("pid");
-        }
+
+        productID = getIntent().getStringExtra("pid");
+        Log.d("status","pid"+productID);
+
         productRef = FirebaseDatabase.getInstance().getReference().child("Products").child(productID);
     }
 
@@ -104,23 +104,10 @@ public class AdminMaintainProductsActivity extends AppCompatActivity {
         else if(TextUtils.isEmpty(pDescription)){
             Toast.makeText(AdminMaintainProductsActivity.this,"Please Write description of the product",Toast.LENGTH_LONG).show();
         }else{
-            String saveCurrentDate,saveCurrentTime,ProductRandomKey;
-
-            Calendar calendar = Calendar.getInstance();
-
-            SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
-            saveCurrentDate = currentDate.format(calendar.getTime());
-
-            SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
-            saveCurrentTime = currentTime.format(calendar.getTime());
-
-            ProductRandomKey = saveCurrentDate + saveCurrentTime;
 
             HashMap<String, Object> productMap = new HashMap<>();
 
-            productMap.put("pid",ProductRandomKey);
-            productMap.put("date",saveCurrentDate);
-            productMap.put("time",saveCurrentTime);
+            productMap.put("pid",productID);
             productMap.put("description",pDescription);
            // productMap.put("image",downloadImageUrl);
             //productMap.put("category",CategoryName);
@@ -132,7 +119,7 @@ public class AdminMaintainProductsActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
                         Toast.makeText(AdminMaintainProductsActivity.this,"Changes applied...",Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(AdminMaintainProductsActivity.this,HomeActivity.class));
+                        startActivity(new Intent(AdminMaintainProductsActivity.this,AdminHomeActivity.class));
                         finish();
                     }
                 }

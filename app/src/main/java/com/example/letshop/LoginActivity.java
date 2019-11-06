@@ -98,14 +98,15 @@ public class LoginActivity extends AppCompatActivity {
             loadingBar.setCanceledOnTouchOutside(false);
             loadingBar.show();
 
-            AllowAccessToAccount(phone,password);
+            AllowAccessToAccount(phone,password,parentDbName);
         }
     }
 
-    private void AllowAccessToAccount(final String phone, final String password) {
+    private void AllowAccessToAccount(final String phone, final String password, final String userType) {
         if(chkBoxRememberMe.isChecked()){
             Paper.book().write(Prevalent.UserPhoneKey, phone);
             Paper.book().write(Prevalent.UserPasswordKey,password);
+            Paper.book().write(Prevalent.UserType,userType);
         }
         final DatabaseReference RootRef;
         RootRef = FirebaseDatabase.getInstance().getReference();

@@ -54,7 +54,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private DatabaseReference ProductRef;
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
-    private String type = "";
     DrawerLayout drawer;
     NavController navController;
 
@@ -80,28 +79,25 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         InitialUI();
 
-        Bundle bundle = new Bundle();
-        bundle.putString("key",type);
+//        Bundle bundle = new Bundle();
+//        bundle.putString("key",type);
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        navController.setGraph(R.navigation.mobile_navigation,bundle);
+//        navController.setGraph(R.navigation.mobile_navigation,bundle);
 
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
        // NavigationUI.setupActionBarWithNavController(this, navController, drawer);
         NavigationUI.setupWithNavController(navigationView, navController);
 
         navigationView.setNavigationItemSelectedListener(this);
-
-
-
         FloatingActionButton fab = findViewById(R.id.fab);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 navController.navigate(R.id.nav_cart);
             }
         });
-
         if(Prevalent.currentOnlineUser != null) {
             userNameTextView.setText(Prevalent.currentOnlineUser.getName());
             Picasso.get().load(Prevalent.currentOnlineUser.getImage()).placeholder(R.drawable.profile).into(profileImageView);
@@ -112,11 +108,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         userNameTextView = headerView.findViewById(R.id.user_profile_name);
         profileImageView = headerView.findViewById(R.id.user_profile_image);
 
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        if(bundle != null){
-            type = getIntent().getExtras().get("Type").toString();
-        }
+//        Intent intent = getIntent();
+//        Bundle bundle = intent.getExtras();
+//        if(bundle != null){
+//            type = getIntent().getExtras().get("Type").toString();
+//        }
 
        // type = getIntent().getExtras().get("Type").toString();
 

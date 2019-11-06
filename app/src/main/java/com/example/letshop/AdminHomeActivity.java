@@ -1,25 +1,21 @@
-package com.example.letshop.ui.items;
-
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
-
-import android.content.Intent;
-import android.os.Bundle;
+package com.example.letshop;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.appcompat.widget.Toolbar;
 
-import com.example.letshop.AdminMaintainProductsActivity;
 import com.example.letshop.Model.Products;
-import com.example.letshop.R;
 import com.example.letshop.ViewHolder.ProductViewHolder;
 import com.example.letshop.ui.productDetails.productDetailsFragment;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -28,56 +24,37 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
-public class ItemsFragment extends Fragment {
+public class AdminHomeActivity extends AppCompatActivity {
 
-    private ItemsViewModel mViewModel;
     private DatabaseReference ProductRef;
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
-    private View root;
-//    private String type = "";
-
-    public static ItemsFragment newInstance() {
-        return new ItemsFragment();
-    }
+    private Toolbar toolbar;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_admin_home);
 
-//        Bundle bundle = this.getArguments();
-//        if(bundle != null){
-//            type = bundle.getString("key");
-//        }
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-
-        root = inflater.inflate(R.layout.items_fragment, container, false);
         InitialUI();
-        DisplayItems();
-        return root;
-    }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(ItemsViewModel.class);
-        // TODO: Use the ViewModel
+        DisplayItem();
     }
 
     private void InitialUI() {
         ProductRef = FirebaseDatabase.getInstance().getReference().child("Products");
-        recyclerView = root.findViewById(R.id.recycler_menu);
+        recyclerView = findViewById(R.id.admin_recycler_menu);
         recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        toolbar = (Toolbar)findViewById(R.id.admin_home_tool_bar);
+
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-    private void DisplayItems() {
-
+    private void DisplayItem() {
         FirebaseRecyclerOptions<Products> options = new FirebaseRecyclerOptions.Builder<Products>()
                 .setQuery(ProductRef,Products.class)
                 .build();
@@ -93,23 +70,10 @@ public class ItemsFragment extends Fragment {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        if(type.equals("Admin")){
-//
-//                            Intent intent = new Intent(getActivity(), AdminMaintainProductsActivity.class);
-//                            intent.putExtra("pid",model.getPid());
-//                            startActivity(intent);
-//                        }else {
-                            Bundle bundle = new Bundle();
-                            bundle.putString("pid", model.getPid());
-
-                            Fragment productDetailFragment = new productDetailsFragment();
-                            productDetailFragment.setArguments(bundle);
-                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                            transaction.replace(R.id.nav_host_fragment, productDetailFragment);
-                            transaction.addToBackStack(null);
-                            transaction.commit();
-                        }
-                    //}
+                        Intent intent = new Intent(AdminHomeActivity.this, AdminMaintainProductsActivity.class);
+                        intent.putExtra("pid",model.getPid());
+                        startActivity(intent);
+                    }
                 });
             }
 
