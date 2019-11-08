@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.example.letshop.MainActivity;
 import com.example.letshop.R;
+import com.example.letshop.ResetPasswordActivity;
 
 import io.paperdb.Paper;
 
@@ -18,7 +19,7 @@ public class AdminCategoryActivity extends AppCompatActivity {
     private ImageView tShirts, sportsTShirts, femalDresses, sweaters;
     private ImageView glasses, hatsCaps, walletsBagsPurses, shoes;
     private ImageView headPhonesHandFree, Laptops, watches, mobilePhones;
-    private Button LogoutBtn, CheckOrdersBtn, maintainProductsBtn;
+    private Button LogoutBtn, CheckOrdersBtn, maintainProductsBtn,SettingsBtn;
 
 
     @Override
@@ -49,6 +50,16 @@ public class AdminCategoryActivity extends AppCompatActivity {
         LogoutBtn = (Button)findViewById(R.id.admin_logout_btn);
         CheckOrdersBtn = (Button)findViewById(R.id.check_order_btn);
         maintainProductsBtn = (Button)findViewById(R.id.maintain_btn);
+        SettingsBtn = (Button)findViewById(R.id.admin_settings);
+
+        SettingsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdminCategoryActivity.this,ResetPasswordActivity.class);
+                intent.putExtra("check", "settings");
+                startActivity(intent);
+            }
+        });
 
         LogoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
