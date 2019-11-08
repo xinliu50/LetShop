@@ -1,9 +1,11 @@
 package com.example.letshop;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -81,6 +83,13 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
         }else if(check.equals("login")){
             phoneNumber.setVisibility(View.VISIBLE);
+
+            verifyButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    verifyUser();
+                }
+            });
         }
     }
 
@@ -139,5 +148,83 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void verifyUser() {
+        final String phone = phoneNumber.getText().toString();
+        final String answer1 = question1.getText().toString().toLowerCase();
+        final String answer2 = question2.getText().toString().toLowerCase();
+
+        if(!TextUtils.isEmpty(phone) && !TextUtils.isEmpty(answer1) && !TextUtils.isEmpty(answer2)){
+            final DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+                    .child("Users").child(phone);
+
+            ref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()) {
+                        String mPhone = dataSnapshot.child("phone").getValue().toString();
+
+                        if (dataSnapshot.hasChild("Security_Questions")) {
+                            String ans1 = dataSnapshot.child("Security_Questions").child("answer1").getValue().toString();
+                            String ans2 = dataSnapshot.child("Security_Questions").child("answer2").getValue().toString();
+
+                            if (!ans1.equals(answer1)) {
+                                Toast.makeText(ResetPasswordActivity.this, "1st answer is wrong...", Toast.LENGTH_LONG).show();
+                            } else if (!ans2.equals(answer2)) {
+                                Toast.makeText(ResetPasswordActivity.this, "2nd answer is wrong...", Toast.LENGTH_LONG).show();
+                            } else {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(ResetPasswordActivity.this);
+                                builder.setTitle("New Password");
+                                final EditText newPassword = new EditText(ResetPasswordActivity.this);
+                                newPassword.setHint("Write Password Here...");
+                                builder.setView(newPassword);
+
+                                builder.setPositiveButton("Change", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (!newPassword.getText().toString().equals("")) {
+                                            ref.child("password").setValue(newPassword.getText().toString())
+                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            if (task.isSuccessful()) {
+                                                                Toast.makeText(ResetPasswordActivity.this, "Password changed successfully...", Toast.LENGTH_LONG).show();
+                                                                Intent intent = new Intent(ResetPasswordActivity.this,LoginActivity.class);
+                                                                startActivity(intent);
+                                                                finish();
+                                                            }
+                                                        }
+                                                    });
+                                        }
+                                    }
+                                });
+
+                                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                });
+                                builder.show();
+                            }
+                        } else {
+                            Toast.makeText(ResetPasswordActivity.this, "You have not yet set the security questions", Toast.LENGTH_LONG).show();
+                        }
+                    }else{
+                        Toast.makeText(ResetPasswordActivity.this, "Phone number does not exist", Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }else{
+            Toast.makeText(ResetPasswordActivity.this,"Please complete this form...",Toast.LENGTH_LONG).show();
+        }
+
     }
 }
