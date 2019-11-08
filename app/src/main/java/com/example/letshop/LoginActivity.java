@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.letshop.Admin.AdminCategoryActivity;
+import com.example.letshop.Buyers.HomeActivity;
 import com.example.letshop.Model.Users;
 import com.example.letshop.Prevalent.Prevalent;
 import com.google.firebase.database.DataSnapshot;
@@ -145,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Prevalent.currentOnlineUser = usersData;
 
 
-                                Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                                 //intent.putExtra("Type","User");
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);

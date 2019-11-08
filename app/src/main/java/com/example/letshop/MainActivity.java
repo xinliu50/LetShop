@@ -9,11 +9,14 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.letshop.Admin.AdminCategoryActivity;
+import com.example.letshop.Buyers.HomeActivity;
 import com.example.letshop.Model.Users;
 import com.example.letshop.Prevalent.Prevalent;
+import com.example.letshop.Sellers.SellerRegisterationActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button joinNowButton, loginButton;
     private ProgressDialog loadingBar;
-
+    private TextView sellerBegin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this,LoginActivity.class));
+            }
+        });
+
+        sellerBegin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SellerRegisterationActivity.class));
             }
         });
 
@@ -69,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         loginButton = (Button)findViewById(R.id.main_login_btn);
         Paper.init(this);
         loadingBar = new ProgressDialog(this);
+        sellerBegin = (TextView)findViewById(R.id.seller_begin);
     }
 
     private void AllowAccess(final String phone, final String password, final String type) {
@@ -89,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
                             Prevalent.currentOnlineUser = usersData;
                             if(userType.equals("Users"))
-                                startActivity(new Intent(MainActivity.this,HomeActivity.class));
+                                startActivity(new Intent(MainActivity.this, HomeActivity.class));
                             else if(userType.equals("Admins"))
                                 startActivity(new Intent(MainActivity.this, AdminCategoryActivity.class));
                         }else{

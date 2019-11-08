@@ -3,7 +3,6 @@ package com.example.letshop;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,7 +16,6 @@ import android.widget.Toast;
 
 import com.example.letshop.Admin.AdminHomeActivity;
 import com.example.letshop.Prevalent.Prevalent;
-import com.example.letshop.ui.settings.SettingsFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;

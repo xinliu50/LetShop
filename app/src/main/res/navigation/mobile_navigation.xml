@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/nav_items"
-        android:name="com.example.letshop.ui.items.ItemsFragment"
+        android:name="com.example.letshop.Buyers.ui.items.ItemsFragment"
         android:label="Items"
         tools:layout="@layout/items_fragment" >
         <argument
@@ -19,43 +19,43 @@
 
     <fragment
         android:id="@+id/nav_cart"
-        android:name="com.example.letshop.ui.cart.CartFragment"
+        android:name="com.example.letshop.Buyers.ui.cart.CartFragment"
         android:label="Cart"
         tools:layout="@layout/cart_fragment" />
 
     <fragment
         android:id="@+id/nav_orders"
-        android:name="com.example.letshop.ui.orders.OrdersFragment"
+        android:name="com.example.letshop.Buyers.ui.orders.OrdersFragment"
         android:label="Orders"
         tools:layout="@layout/orders_fragment" />
 
     <fragment
         android:id="@+id/nav_categories"
-        android:name="com.example.letshop.ui.categories.CategoriesFragment"
+        android:name="com.example.letshop.Buyers.ui.categories.CategoriesFragment"
         android:label="Categories"
         tools:layout="@layout/categories_fragment" />
 
     <fragment
         android:id="@+id/nav_settings"
-        android:name="com.example.letshop.ui.settings.SettingsFragment"
+        android:name="com.example.letshop.Buyers.ui.settings.SettingsFragment"
         android:label="Settings"
         tools:layout="@layout/settings_fragment" />
 
     <fragment
         android:id="@+id/nav_logout"
-        android:name="com.example.letshop.ui.logout.LogoutFragment"
+        android:name="com.example.letshop.Buyers.ui.logout.LogoutFragment"
         android:label="logout"
         tools:layout="@layout/logout_fragment" />
 
     <fragment
         android:id="@+id/nav_product_details"
-        android:name="com.example.letshop.ui.productDetails.productDetailsFragment"
+        android:name="com.example.letshop.Buyers.ui.productDetails.productDetailsFragment"
         android:label="Product Details"
         tools:layout="@layout/product_details_fragment" />
 
     <fragment
         android:id="@+id/nav_search"
-        android:name="com.example.letshop.ui.search.SearchFragment"
+        android:name="com.example.letshop.Buyers.ui.search.SearchFragment"
         android:label="Search"
         tools:layout="@layout/search_fragment" />
 
