@@ -16,7 +16,10 @@ import com.example.letshop.Admin.AdminCategoryActivity;
 import com.example.letshop.Buyers.HomeActivity;
 import com.example.letshop.Model.Users;
 import com.example.letshop.Prevalent.Prevalent;
+import com.example.letshop.Sellers.SellerHomeActivity;
 import com.example.letshop.Sellers.SellerRegisterationActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -71,6 +74,17 @@ public class MainActivity extends AppCompatActivity {
 
                 AllowAccess(UserPhoneKey,UserPasswordKey,UserType);
             }
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(firebaseUser != null){
+            startActivity(new Intent(MainActivity.this, SellerHomeActivity.class));
+            finish();
         }
     }
 
