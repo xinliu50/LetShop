@@ -105,7 +105,7 @@ public class SellerRegisterationActivity extends AppCompatActivity {
                                                     loadingBar.dismiss();
                                                     Toast.makeText(SellerRegisterationActivity.this, "You are Registered successfully", Toast.LENGTH_LONG).show();
 
-                                                    startActivity(new Intent(SellerRegisterationActivity.this, SellerHomeActivity.class));
+                                                    startActivity(new Intent(SellerRegisterationActivity.this, SellerLoginActivity.class));
                                                     finish();
                                                 }else{
                                                     Toast.makeText(SellerRegisterationActivity.this, "Something wrong, try again", Toast.LENGTH_LONG).show();

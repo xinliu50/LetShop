@@ -108,6 +108,7 @@ public class LoginActivity extends AppCompatActivity {
             loadingBar.setCanceledOnTouchOutside(false);
             loadingBar.show();
 
+//            Log.d("status","parentDbName:"+parentDbName);
             AllowAccessToAccount(phone,password,parentDbName);
         }
     }
@@ -116,6 +117,7 @@ public class LoginActivity extends AppCompatActivity {
         if(chkBoxRememberMe.isChecked()){
             Paper.book().write(Prevalent.UserPhoneKey, phone);
             Paper.book().write(Prevalent.UserPasswordKey,password);
+//            Paper.book().write(Prevalent.UserType,userType);
         }
         Paper.book().write(Prevalent.UserType,userType);
         final DatabaseReference RootRef;
@@ -125,6 +127,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.child(parentDbName).child(phone).exists()){
+
+                    Log.d("status","parentDbName:"+parentDbName);
                     Log.d("status",phone);
                     Users usersData = dataSnapshot.child(parentDbName).child(phone).getValue(Users.class);
                     if(usersData.getPhone().equals(phone)){
@@ -165,7 +169,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                loadingBar.dismiss();
             }
         });
     }
