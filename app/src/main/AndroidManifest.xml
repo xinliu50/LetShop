@@ -21,7 +21,7 @@
         <activity android:name=".ResetPasswordActivity" />
         <activity
             android:name=".Admin.AdminHomeActivity"
-            android:parentActivityName=".Admin.AdminCategoryActivity" />
+            android:parentActivityName=".Sellers.SellerProductCategoryActivity" />
         <activity android:name=".Admin.AdminMaintainProductsActivity" />
         <activity android:name=".Admin.AdminUsersProductsActivity" />
         <activity android:name=".Admin.AdminNewOrdersActivity" />
@@ -29,8 +29,8 @@
             android:name=".Buyers.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Admin.AdminCategoryActivity" />
-        <activity android:name=".Admin.AdminAddNewProductActivity" />
+        <activity android:name=".Sellers.SellerProductCategoryActivity" />
+        <activity android:name=".Sellers.SellerAddNewProductActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity">

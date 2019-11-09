@@ -18,6 +18,8 @@
         android:label="Add"
         tools:layout="@layout/fragment_add" />
 
+
+
     <fragment
         android:id="@+id/navigation_seller_logout"
         android:name="com.example.letshop.Sellers.ui.logout.LogoutFragment"

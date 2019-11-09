@@ -15,7 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.letshop.Admin.AdminCategoryActivity;
+import com.example.letshop.Sellers.SellerProductCategoryActivity;
 import com.example.letshop.Buyers.HomeActivity;
 import com.example.letshop.Model.Users;
 import com.example.letshop.Prevalent.Prevalent;
@@ -138,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
                                 loadingBar.dismiss();
 
 
-                                Intent intent = new Intent(LoginActivity.this, AdminCategoryActivity.class);
+                                Intent intent = new Intent(LoginActivity.this, SellerProductCategoryActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                                 finish();
