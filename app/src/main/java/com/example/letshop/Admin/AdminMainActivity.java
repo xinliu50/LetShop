@@ -72,7 +72,7 @@ public class AdminMainActivity extends AppCompatActivity {
         checkApproveProductsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(AdminMainActivity.this, AdminCheckNewProductsActivity.class));
             }
         });
     }
