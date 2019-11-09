@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.letshop.Admin.AdminMainActivity;
 import com.example.letshop.Sellers.SellerProductCategoryActivity;
 import com.example.letshop.Buyers.HomeActivity;
 import com.example.letshop.Model.Users;
@@ -136,9 +137,10 @@ public class LoginActivity extends AppCompatActivity {
                             if(parentDbName.equals("Admins")){
                                 Toast.makeText(LoginActivity.this,"Admin Logged in successfully ",Toast.LENGTH_LONG).show();
                                 loadingBar.dismiss();
+                                Prevalent.currentOnlineUser = usersData;
 
 
-                                Intent intent = new Intent(LoginActivity.this, SellerProductCategoryActivity.class);
+                                Intent intent = new Intent(LoginActivity.this, AdminMainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                                 finish();

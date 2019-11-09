@@ -46,38 +46,6 @@ public class SellerProductCategoryActivity extends AppCompatActivity {
         watches = (ImageView)findViewById(R.id.watches);
         mobilePhones = (ImageView)findViewById(R.id.mobilephones);
 
-//        LogoutBtn = (Button)findViewById(R.id.admin_logout_btn);
-//        CheckOrdersBtn = (Button)findViewById(R.id.check_order_btn);
-//        maintainProductsBtn = (Button)findViewById(R.id.maintain_btn);
-//        SettingsBtn = (Button)findViewById(R.id.admin_settings);
-
-//        SettingsBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(SellerProductCategoryActivity.this,ResetPasswordActivity.class);
-//                intent.putExtra("check", "settings");
-//                startActivity(intent);
-//            }
-//        });
-
-//        LogoutBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Paper.book().destroy();
-//                Intent intent = new Intent(SellerProductCategoryActivity.this, MainActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                startActivity(intent);
-//                finish();
-//            }
-//        });
-
-//        CheckOrdersBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(SellerProductCategoryActivity.this, AdminNewOrdersActivity.class);
-//                startActivity(intent);
-//            }
-//        });
 
         tShirts.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,6 +155,40 @@ public class SellerProductCategoryActivity extends AppCompatActivity {
             }
         });
 
+//        LogoutBtn = (Button)findViewById(R.id.admin_logout_btn);
+//        CheckOrdersBtn = (Button)findViewById(R.id.check_order_btn);
+//        maintainProductsBtn = (Button)findViewById(R.id.maintain_btn);
+//        SettingsBtn = (Button)findViewById(R.id.admin_settings);
+//
+//        SettingsBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(SellerProductCategoryActivity.this,ResetPasswordActivity.class);
+//                intent.putExtra("check", "settings");
+//                startActivity(intent);
+//            }
+//        });
+//
+//        LogoutBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Paper.book().destroy();
+//                Intent intent = new Intent(SellerProductCategoryActivity.this, MainActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(intent);
+//                finish();
+//            }
+//        });
+//
+//        CheckOrdersBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(SellerProductCategoryActivity.this, AdminNewOrdersActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+//
+//
 //        maintainProductsBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

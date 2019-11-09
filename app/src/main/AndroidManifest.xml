@@ -12,10 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Admin.CheckNewProductsActivity"></activity>
+        <activity android:name=".Admin.AdminMainActivity" />
         <activity
             android:name=".Sellers.SellerHomeActivity"
-            android:label="seller_home"
-            ></activity>
+            android:label="seller_home" />
         <activity android:name=".Sellers.SellerLoginActivity" />
         <activity android:name=".Sellers.SellerRegisterationActivity" />
         <activity android:name=".ResetPasswordActivity" />
