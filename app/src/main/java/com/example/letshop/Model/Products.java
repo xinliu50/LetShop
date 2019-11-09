@@ -2,11 +2,11 @@ package com.example.letshop.Model;
 
 public class Products {
 
-    private String category, date, image, pid, time, pname, description, price;
+    private String category, date, image, pid, time, pname, description, price, productState;
 
     public Products(){}
 
-    public Products(String category, String date, String image, String pid, String time, String pname, String description, String price) {
+    public Products(String category, String date, String image, String pid, String time, String pname, String description, String price, String productState) {
         this.category = category;
         this.date = date;
         this.image = image;
@@ -15,6 +15,7 @@ public class Products {
         this.pname = pname;
         this.description = description;
         this.price = price;
+        this.productState = productState;
     }
 
     public String getCategory() {
@@ -49,6 +50,10 @@ public class Products {
         return price;
     }
 
+    public String getProductState() {
+        return productState;
+    }
+
     public void setCategory(String category) {
         this.category = category;
     }
@@ -79,5 +84,9 @@ public class Products {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public void setProductState(String productState) {
+        this.productState = productState;
     }
 }
